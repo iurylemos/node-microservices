@@ -4,10 +4,13 @@ const { url, pwd, user } = require("./config");
 async function connectDB() {
   try {
     await mongoose.connect(url, {
-      user: user,
-      pass: pwd,
+      authSource: "admin",
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
+      user: user,
+      pass: pwd,
+      serverSelectionTimeoutMS: 5000,
     });
 
     console.log("Auth-Service DB Connected");

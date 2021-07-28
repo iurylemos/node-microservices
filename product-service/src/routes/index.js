@@ -20,4 +20,6 @@ routes.post("/product/create", isAutheticated, async (req, res) => {
   return res.json(newProduct);
 });
 
+// User sends a list of produc's IDs to buy
+
 module.exports = { routes };
