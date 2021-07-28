@@ -1,17 +1,21 @@
 const jwt = require("jsonwebtoken");
 
 async function isAutheticated(req, res, next) {
-  const token = req.headers["authorization"].split(" ")[1];
-  // Bearer <token>.split(" ")[1];
-  // ["Bearer": "<token>"]
+  try {
+    const token = req.headers["Authorization"].split(" ")[1];
+    // Bearer <token>.split(" ")[1];
+    // ["Bearer": "<token>"]
 
-  jwt.verify(token, "secret", (err, user) => {
-    if (err) return res.json({ message: err });
-    else {
-      req.user = user;
-      next();
-    }
-  });
+    jwt.verify(token, "secret", (err, user) => {
+      if (err) return res.json({ message: err });
+      else {
+        req.user = user;
+        next();
+      }
+    });
+  } catch (error) {
+    return res.json({ message: "Not authorized" });
+  }
 }
 
 module.exports = { isAutheticated };
