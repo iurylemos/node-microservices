@@ -2,8 +2,7 @@ const express = require("express");
 const { isAutheticated } = require("../middlewares/isAutheticated");
 const { OrderModel } = require("../models/Order");
 
-const routes = new express.Router();
-
+const routes = express.Router();
 // Create a new product.
 // Buy a product.
 

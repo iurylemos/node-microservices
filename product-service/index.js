@@ -1,6 +1,5 @@
 const express = require("express");
 const { connectDB } = require("./src/db/connection");
-const { connectMQ } = require("./src/rabbitmq/connection");
 const { routes } = require("./src/routes");
 
 const app = express();
@@ -11,10 +10,9 @@ app.use(routes);
 (async () => {
   try {
     await connectDB();
-    await connectMQ();
 
     app.listen(PORT, () => {
-      console.log(`Auth-Service at ${PORT}`);
+      console.log(`Product-Service at ${PORT}`);
     });
   } catch (error) {
     console.log("error", error);

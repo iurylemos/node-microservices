@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 async function isAutheticated(req, res, next) {
   try {
-    const token = req.headers["Authorization"].split(" ")[1];
+    const token = req.headers["authorization"].split(" ")[1];
     // Bearer <token>.split(" ")[1];
     // ["Bearer": "<token>"]
 
@@ -14,6 +14,7 @@ async function isAutheticated(req, res, next) {
       }
     });
   } catch (error) {
+    console.log("ERROR", error);
     return res.json({ message: "Not authorized" });
   }
 }

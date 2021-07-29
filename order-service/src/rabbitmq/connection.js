@@ -6,6 +6,8 @@ async function connectMQ() {
     const conn = await amqp.connect(amqpServer);
     const channel = await conn.createChannel();
     await channel.assertQueue("ORDER");
+
+    return { channel, conn };
   } catch (error) {
     console.log(`Error in RabbitMQ ${error}`);
   }
