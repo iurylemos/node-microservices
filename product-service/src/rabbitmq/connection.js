@@ -5,7 +5,7 @@ async function connectMQ() {
     const amqpServer = "amqp://localhost:5672";
     const conn = await amqp.connect(amqpServer);
     const channel = await conn.createChannel();
-    await channel.assertQueue("PRODUCT");
+    await channel.assertQueue("PRODUCT", { durable: true });
 
     return { channel, conn };
   } catch (error) {

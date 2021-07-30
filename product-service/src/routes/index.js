@@ -28,15 +28,21 @@ routes.post("/product/create", isAutheticated, async (req, res) => {
 
 routes.post("/product/buy", isAutheticated, async (req, res) => {
   try {
-    let order = "";
+    let order;
     const { ids } = req.body;
 
-    console.log("IDS", ids);
+    if (!ids || !Array.isArray(ids)) {
+      res
+        .status(400)
+        .send({ message: "just permission ids if it is equal array" });
+      return;
+    }
 
+    // get data on the database
     const products = await ProductModel.find({ _id: { $in: ids } });
 
     // connectRabbitMQ
-    const { channel } = await connectMQ();
+    const { channel, conn } = await connectMQ();
 
     channel.sendToQueue(
       "ORDER",
@@ -48,13 +54,32 @@ routes.post("/product/buy", isAutheticated, async (req, res) => {
       )
     );
 
-    channel.consume("PRODUCT", (data) => {
-      order = JSON.parse(data.content);
+    await channel.consume("PRODUCT", function (msg) {
+      console.log("aqui?", msg.content.toString());
+      order = JSON.parse(msg.content);
+      channel.ack(msg);
+      channel.close();
+      conn.close();
     });
 
-    return res.json(order);
+    // const message = channel.get("PRODUCT", { noAck: true }, (err, msg) => {
+    //   if (!msg) {
+    //     console.log(" Empty message recieved");
+    //     channel.reject(msg, true);
+    //   } else {
+    //     console.log("MSG consumed: ", msg.content.toString());
+    //     channel.ack(msg);
+    //     channel.close();
+    //     conn.close();
+    //   }
+    // });
+    res.status(200).send(order);
+    return;
+    // return res.json(order);
   } catch (error) {
-    return res.json(error);
+    console.log("ERROR", error);
+    res.status(500).send({ message: error });
+    return;
   }
 });
 
