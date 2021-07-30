@@ -62,17 +62,6 @@ routes.post("/product/buy", isAutheticated, async (req, res) => {
       conn.close();
     });
 
-    // const message = channel.get("PRODUCT", { noAck: true }, (err, msg) => {
-    //   if (!msg) {
-    //     console.log(" Empty message recieved");
-    //     channel.reject(msg, true);
-    //   } else {
-    //     console.log("MSG consumed: ", msg.content.toString());
-    //     channel.ack(msg);
-    //     channel.close();
-    //     conn.close();
-    //   }
-    // });
     res.status(200).send(order);
     return;
     // return res.json(order);
