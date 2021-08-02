@@ -10,12 +10,12 @@ routes.post("/auth/login", async (req, res) => {
   const user = await UserModel.findOne({ email });
 
   if (!user) {
-    return res.json({ message: "User doesn't exist" });
+    return res.status(403).send({ message: "User doesn't exist" });
   } else {
     // Check if the entered password is valid
 
     if (password !== user.password) {
-      return res.json({ message: "Password is incorrect" });
+      return res.status(403).send({ message: "Password is incorrect" });
     }
 
     const payload = {
@@ -25,7 +25,7 @@ routes.post("/auth/login", async (req, res) => {
     jwt.sign(payload, "secret", (err, token) => {
       if (err) console.log(err);
       else {
-        return res.json({ token: token });
+        return res.status(200).send({ token: token });
       }
     });
   }

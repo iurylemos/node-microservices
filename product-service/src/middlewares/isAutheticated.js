@@ -7,7 +7,7 @@ async function isAutheticated(req, res, next) {
     // ["Bearer": "<token>"]
 
     jwt.verify(token, "secret", (err, user) => {
-      if (err) return res.json({ message: err });
+      if (err) return res.status(403).send({ message: err });
       else {
         req.user = user;
         next();
@@ -15,7 +15,7 @@ async function isAutheticated(req, res, next) {
     });
   } catch (error) {
     console.log("ERROR", error);
-    return res.json({ message: "Not authorized" });
+    return res.status(403).send({ message: "Not authorized" });
   }
 }
 

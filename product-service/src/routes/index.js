@@ -23,6 +23,15 @@ routes.post("/product/create", isAutheticated, async (req, res) => {
   return res.json(newProduct);
 });
 
+routes.get("/products", isAutheticated, async (req, res) => {
+  try {
+    console.log("REQUEST PRODUCTS GET");
+    const products = await ProductModel.find();
+    res.status(200).send(products);
+    return;
+  } catch (error) {}
+});
+
 // User sends a list of produc's IDs to buy
 // Creating an order with those products and total value of sum of product's prices
 
