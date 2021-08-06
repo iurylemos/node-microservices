@@ -22,6 +22,28 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - rabbitmq_go_net
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: "postgres"
+    environment:
+      POSTGRES_DB: orders
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /var/lib/postgresql/data/webapi-mvc
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "25432:5432"
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+
+volumes:
+  database_postgres:
 networks:
   rabbitmq_go_net:
+    driver: bridge
+  fullstack:
     driver: bridge

@@ -6,7 +6,7 @@ const routes = express.Router();
 // Create a new product.
 // Buy a product.
 
-routes.post("/product/create", isAutheticated, async (req, res) => {
+routes.post("/order/create", isAutheticated, async (req, res) => {
   // req.user.email
 
   const { name, description, price } = req.body;

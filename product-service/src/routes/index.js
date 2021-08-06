@@ -11,16 +11,22 @@ const routes = express.Router();
 routes.post("/product/create", isAutheticated, async (req, res) => {
   // req.user.email
 
-  const { name, description, price } = req.body;
-  const newProduct = new ProductModel({
-    name,
-    description,
-    price,
-  });
+  try {
+    const { name, description, price } = req.body;
+    const newProduct = new ProductModel({
+      name,
+      description,
+      price,
+    });
 
-  newProduct.save();
+    newProduct.save();
 
-  return res.json(newProduct);
+    return res.json(newProduct);
+  } catch (error) {
+    console.log("ERROR", error);
+    res.status(500).send({ message: error });
+    return;
+  }
 });
 
 routes.get("/products", isAutheticated, async (req, res) => {
@@ -29,7 +35,11 @@ routes.get("/products", isAutheticated, async (req, res) => {
     const products = await ProductModel.find();
     res.status(200).send(products);
     return;
-  } catch (error) {}
+  } catch (error) {
+    console.log("ERROR", error);
+    res.status(500).send({ message: error });
+    return;
+  }
 });
 
 // User sends a list of produc's IDs to buy
